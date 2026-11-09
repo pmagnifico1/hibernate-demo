@@ -1,0 +1,62 @@
+package com.spring.hibernate_demo.dao;
+
+import com.spring.hibernate_demo.entity.Student;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+import jakarta.transaction.Transactional;
+
+
+
+@Repository 
+public class StudentDaoImplment implements StudentDao {
+
+  private EntityManager em;
+  public StudentDaoImplment(EntityManager em) {
+    this.em = em;
+  }
+
+  @Override 
+  @Transactional 
+  public void save(Student theStudent) {
+    em.persist(theStudent);
+  }
+
+  public Student findById(Integer id) {
+    return em.find(Student.class, id);
+  }
+
+  public List<Student> findAll() {
+    TypedQuery<Student> query = em.createQuery("FROM Student order by lastName", Student.class);
+    return query.getResultList();
+  } 
+
+  public List<Student> findByLastName(String lastName) {
+    TypedQuery<Student> query = em.createQuery("FROM Student where lastName=:data", Student.class);
+    query.setParameter("data", lastName);
+    return query.getResultList();
+  }
+
+  @Override 
+  @Transactional
+  public void update(Student theStudent) {
+    em.merge(theStudent);
+  }
+
+  @Override 
+  @Transactional
+  public void delete(Integer id) {
+    Student student = em.find(Student.class, id);
+    em.remove(student);
+  }
+
+  @Override 
+  @Transactional
+  public int deleteAll() {
+    int numRows = em.createQuery("DELETE FROM Student").executeUpdate();
+    return numRows;
+  }
+
+}
