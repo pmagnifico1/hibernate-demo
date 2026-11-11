@@ -11,10 +11,10 @@ import jakarta.transaction.Transactional;
 
 
 @Repository 
-public class StudentDaoImplment implements StudentDao {
+public class StudentDaoImplement implements StudentDao {
 
   private EntityManager em;
-  public StudentDaoImplment(EntityManager em) {
+  public StudentDaoImplement(EntityManager em) {
     this.em = em;
   }
 
